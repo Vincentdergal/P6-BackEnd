@@ -6,15 +6,24 @@ const path = require('path')
 const bodyParser = require("body-parser");
 const saucesRoutes = require('./routes/sauces')
 const userRoutes = require("./routes/user");
+const helmet = require('helmet');
+const morgan = require('morgan')
+const logger = require('./controllers/logger');
+const dotenv = require("dotenv");
 
+dotenv.config();
+
+logger.info("Un Message");
+logger.error("Une Erreur");
 
 mongoose.connect('mongodb+srv://Vincentdergal:Vincentdergal60600@openclassroomsp6.rdaf2uh.mongodb.net/?retryWrites=true&w=majority',
 { useNewUrlParser: true,
   useUnifiedTopology: true })
 .then(() => console.log('Connexion à MongoDB réussie !'))
 .catch(() => console.log('Connexion à MongoDB échouée !'));
-  
 
+app.use(morgan("short", { stream: logger.stream }));
+app.use(bodyParser.urlencoded({extended: false}));
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -28,6 +37,8 @@ app.use(express.json());
 app.use('/images',express.static(path.join(__dirname,'images')))
 app.use("/api/sauces", saucesRoutes);
 app.use("/api/auth", userRoutes);
+app.use(helmet());
+
 
 module.exports =  app;
 
