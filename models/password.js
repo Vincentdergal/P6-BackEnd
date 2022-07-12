@@ -20,6 +20,6 @@ passwordSchema
   .spaces() // Should not have spaces
   .is()
   .not()
-  .oneOf(["Passw0rd", "Password123"]); // Blacklist these values
+  .oneOf(["Passw0rd","Password123","123456","123456789","Qwerty","Password","12345","12345678","111111","1234567","123123","Qwerty123","1q2w3e","1234567890","DEFAULT","Abc123","654321","Qwertyuiop","Iloveyou"]); // Blacklist these values
 
 module.exports = passwordSchema;

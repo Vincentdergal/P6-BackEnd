@@ -10,17 +10,21 @@ const helmet = require('helmet');
 const morgan = require('morgan')
 const logger = require('./controllers/logger');
 const dotenv = require("dotenv");
+const rateLimiter = require("./middleware/rateLimiter")
+
 
 dotenv.config();
 
 logger.info("Un Message");
 logger.error("Une Erreur");
+app.use(rateLimiter)
 
-mongoose.connect('mongodb+srv://Vincentdergal:Vincentdergal60600@openclassroomsp6.rdaf2uh.mongodb.net/?retryWrites=true&w=majority',
+const urlMongo = process.env.MONGO_DB_CONNECTION_STRING
+mongoose.connect(urlMongo,
 { useNewUrlParser: true,
   useUnifiedTopology: true })
-.then(() => console.log('Connexion à MongoDB réussie !'))
-.catch(() => console.log('Connexion à MongoDB échouée !'));
+.then(() => logger.info('Connexion à MongoDB réussie !'))
+.catch(() => logger.info('Connexion à MongoDB échouée !'));
 
 app.use(morgan("short", { stream: logger.stream }));
 app.use(bodyParser.urlencoded({extended: false}));
